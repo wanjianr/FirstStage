@@ -4,15 +4,50 @@ import java.util.Random;
 
 public class leetcode215_数组中的第K个最大元素 {
     public static void main(String[] args) {
-        int[] arr = new int[] {3,2,3,1,2,4,5,5,6};
-        quickSort(arr);
+        int[] arr = new int[] {3,2,1,5,6,4};
+        System.out.println(findKthLargest(arr, 2));
         for (int i : arr) {
             System.out.print(i);
         }
     }
 
-    public int findKthLargest(int[] nums, int k) {
-        return 0;
+    public static int findKthLargest(int[] nums, int k) {
+        int len = nums.length;
+        int l = 0;
+        int r = len - 1;
+        int target = len - k;
+        while (true) {
+            int partition = partition(nums, l, r);
+            if (target == partition) {
+                return nums[partition];
+            } else if (target > partition) {
+                l = partition + 1;
+            } else {
+                r = partition - 1;
+            }
+        }
+    }
+
+    public static int partition(int[] nums, int left, int right) {
+        int flag = nums[left];
+        int l = left+1;
+        int r = right;
+        while (true) {
+            // return不能返回l，因为这里l执行完while后多加了1
+            while (l<=r && nums[l] < flag) {
+                l++;
+            }
+            // 由于有l<=r的限制，这里的r不会多减1
+            while (l<=r && nums[r] > flag) {
+                r--;
+            }
+            if (l >= r) break;
+            swap(nums, l, r);
+            l++;
+            r--;
+        }
+        swap(nums, left, l);
+        return l;
     }
 
     /**
